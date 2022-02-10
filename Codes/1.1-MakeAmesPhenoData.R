@@ -27,12 +27,9 @@ dir.create(dir.out, recursive = TRUE)
 # load phenotype info file
 pheno.all <- read.xls(file.pheno.all, stringsAsFactors = F)
 
-
-table(pheno.all$Removal_decision)
-
 # phenotype data to be kept
 tf <- (pheno.all$removed_vita == "no") & (pheno.all$Removal_decision == "keep")
-table(tf) # TRUE should be 1462 -- OK!!
+table(tf) # TRUE should be 1462 -- ok!
 
 # 1462 phenotype data
 df.info <- data.frame("ID" = pheno.all[tf, "Accession.Number_ion"],
@@ -47,7 +44,7 @@ indv.tmp <- fread(file.indv, header = FALSE)
 id.geno <- indv.tmp$V1
 
 # check if all phenotyped accessions are in the genotye data
-setdiff(df.toco.pheno$ID, id.geno) # perfect!
+setdiff(df.toco.pheno$ID, id.geno) # ok!
 
 # load lambda
 Lambda.all <- read.delim(file.lambda, stringsAsFactors = F)
