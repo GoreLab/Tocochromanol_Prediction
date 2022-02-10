@@ -1,9 +1,12 @@
 ## Overview 
-This folder has all R codes to perform the analysis in "paper_title". All data analyses were performed in R version 3.5.0 in linux OS (high-spec machine for computation), while a few post-hoc visualization (such as making plots based on the predicted values) were executed in R version 4.1.2 in windows OS. All codes were developed by Ryokei Takana, expect for the "0.1-MyFun_BoxcoxFunction.R" that was originally developed by Christine Diepenbrock.
+This folder has all R codes to perform the analysis in "paper_title". All data analyses were performed in R version 3.5.0 in linux OS (high-spec machine for computation), while a few post-hoc visualization (such as making plots based on the predicted values) were executed in R version 4.1.2 in windows OS. All codes were developed by Ryokei Takana, expect for the "0.1-MyFun_BoxcoxFunction.R" that was originally developed by Christine Diepenbrock. 
 
 ## Codes to create data files from raw data files for the downstream statistical analyses
 #### 0.1-MyFun_BoxcoxFunction.R
 This R code has a function for the Box-Cox transformation, including an optimization of the convinient lambda value. This function was used in Wu et al. (in prep) for the tocochromanol phenotypes in Ames panel, and therfore we applied the same method to the phenotypes in the 282 panel.
+
+#### 0.3-Functions_for_MTM.R
+This R code has a function to run the multi-trait model, which is used in "4.4-Mtm_UseSomeGenes.R"
 
 #### 1.1-MakeAmesPhenoData.R / 1.2-MakeGbPhenoData.R
 These two R codes create files of tocochromanol phenotypes: transformed and untransformed BLUE (for Ames panel) or BLUP (for the 282 panel) values, convinient lambda values, and the sample ID correspondence between phenotype and genotype data.
@@ -26,6 +29,24 @@ This code uses GBLUP to predict (1) the 282 panel from the Ames panel and (2) th
 
 #### 3.1-GenPreCv_SinglePop_trans.R / 3.2-GenPreCv_SinglePop_trans_GBLUP.R
 These codes perform the cross-validation: the former code "3.1-GenPreCv_SinglePop_trans.R" uses the BayesB model, while the latter uses the GBLUP model.
+
+
+## Codes for the transcriptome-based prediction
+#### 4.1-GenExpPred_trans.R
+This code perform the cross-validation with five models: (1) GBLUP as baseline, (2) TBLUP with all 22137 genes, (3) TBLUP with 111 a priori pathway genes, (4) GBLUP + TBLUP with all 22137 genes, and (5) GBLUP + TBLUP with 111 a priori pathway genes. 
+
+#### 4.2-GenExpFit_trans.R
+This code fits the two GBLUP + TBLUP models to the entire 545 lines, and calculates the regression coefficients of the genes according to the formula shown in Zhang et al. (2021). The estimated regression coefficients were then used for the principle component analysis etc.
+
+#### 4.3-MakeDataForMtm.R / 4.4-Mtm_UseSomeGenes.R
+These two codes applies the multi-trait model as one of our transcriptome-based prediction models. The first script "4.3-MakeDataForMtm.R" creates an R object that includes minimal data for the multi-trait prediction (this step is not necessary to be separately done, but I made this code for simplisity). The latter code applies the multi-trait model using the MTM package.
+
+
+
+
+
+
+
 
 
 
