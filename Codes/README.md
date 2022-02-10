@@ -14,7 +14,7 @@ These two R codes create files of tocochromanol phenotypes: transformed and untr
 #### 1.4-MakeCvFold.R / 1.6-MakeCvFold_Exp.R
 The former code "1.4-MakeCvFold.R" creates a fold (i.e., randomly created K groups, where K = 5 in this study) for the cross-validation with X replications (X = 10 in this study) for the Ames and the 282 panels. Similarly, "1.6-MakeCvFold_Exp.R" creates the cross-validation fold for the 545 accessions for the transcriptome-based prediction analysis.
 
-#### 1.5 MakeGenReMat.R
+#### 1.5-MakeGenReMat.R
 This code calculates genomic relationship matrix for (1) all accessions either in the Ames or 282 panel, (2) accessions in the Ames panel, (3) accessions in the 282 panel, and (4) the 545 Ames accessions for the transcriptome-based predcition analysis. The genomic relationship matrix was calculated in VanRaden's method 1 (VanRaden, 2008).
 
 
