@@ -43,8 +43,6 @@ myFun.calc.G <- function(X.012, batch = 3000, ...) {
    return(G)
 }
 
-
-
 # # test
 # G1 <- myFun.calc.G(X.012 = geno.mat[, 1:2000], batch = 1000)
 # G2 <- A.mat(geno.mat[, 1:2000] - 1)
@@ -66,41 +64,9 @@ GbId <- GbPheno$ID
 G <- myFun.calc.G(X.012 = geno.mat[GbId, ], batch = 1000)
 write.csv(G, "RESULT/1.5-MakeGenReMat/GenReMat_gb.csv")
 
-# # (4) For the accessions with expression data
-# ExpData <- fread("RAWDATA/expression_BLUE_filtered_v1.csv")
-# ExpId <- gsub("_", "", ExpData$Accession_ID)
-# ExpId.common <- intersect(rownames(geno.mat), ExpId)
-# G <- myFun.calc.G(X.012 = geno.mat[ExpId.common, ], batch = 1000)
-# write.csv(G, "RESULT/1.5-MakeGenReMat/GenReMat_ForExpData.csv")
-
 # (4) For the accessions with expression data
 ExpData <- fread("RAWDATA/ExprData_Ames/expression_BLUE_final_v1.1_B73.csv")
 ExpId <- gsub("_", "", ExpData$Accession_ID)
 ExpId.common <- intersect(rownames(geno.mat), ExpId) # all 545 retained
 G <- myFun.calc.G(X.012 = geno.mat[ExpId.common, ], batch = 1000)
 write.csv(G, "RESULT/1.5-MakeGenReMat/GenReMat_ForExpData.csv")
-
-
-# ---------------------------------------------------------------------------- #
-ExpData <- fread("RAWDATA/ExprData_Ames/expression_BLUE_final_v1.1_B73.csv")
-ExpId <- gsub("_", "", ExpData$Accession_ID)
-ExpId.common <- intersect(rownames(geno.mat), ExpId) # all 545 retained
-X <- geno.mat[ExpId.common, ]
-x <- apply(X, 2, sum)
-af <- x / (2 * nrow(X))
-maf <- rep(NA, length(af))
-for ( i in 1:length(af) ) {
-   maf[i] <- min(af[i], 1 - af[i])
-}
-hist(maf)
-sum(maf == 0)
-sum(maf < 0.01)
-sum((0 < maf) & (maf <= 0.01))
-sum(maf > 0.01)
-
-
-# ---------------------------------------------------------------------------- #
-
-AmesPheno <- read.csv("RESULT/1.1-MakeAmesPhenoData/AmesPheno.csv", stringsAsFactors = F)
-AmesId <- AmesPheno$ID
-
