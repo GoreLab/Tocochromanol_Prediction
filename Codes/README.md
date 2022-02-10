@@ -14,5 +14,4 @@ The former code "1.4-MakeCvFold.R" creates a fold (i.e., randomly created K grou
 #### 1.5 MakeGenReMat.R
 This code calculates genomic relationship matrix for (1) all accessions either in the Ames or 282 panel, (2) accessions in the Ames panel, (3) accessions in the 282 panel, and (4) the 545 Ames accessions for the transcriptome-based predcition analysis. The genomic relationship matrix was calculated in VanRaden's method 1 (VanRaden, 2008).
 
-#### 
 
