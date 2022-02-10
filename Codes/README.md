@@ -24,6 +24,8 @@ Note that the name of the latter code is misleading, as it does not calculate th
 #### 2.3-GenPreFit_SinglePop_trans_GBLUP.R
 This code uses GBLUP to predict (1) the 282 panel from the Ames panel and (2) the Ames panel from the 282 panel. The predicted genotypic values were back-transformed as done in "2.2-PredictionAccuracy_trans.R" for the result from BayesB.
 
+#### 3.1-GenPreCv_SinglePop_trans.R / 3.2-GenPreCv_SinglePop_trans_GBLUP.R
+These codes perform the cross-validation: the former code "3.1-GenPreCv_SinglePop_trans.R" uses the BayesB model, while the latter uses the GBLUP model.
 
 
 
