@@ -42,10 +42,12 @@ This code fits the two GBLUP + TBLUP models to the entire 545 lines, and calcula
 These two codes applies the multi-trait model as one of our transcriptome-based prediction models. The first script "4.3-MakeDataForMtm.R" creates an R object that includes minimal data for the multi-trait prediction (this step is not necessary to be separately done, but I made this code for simplisity). The latter code applies the multi-trait model using the MTM package.
 
 
+## Codes for the multi-kernel GBLUP based on the NAM JL-QTL
+#### 5.1-MultiKernel_Across_trans.R
+This code applies the multi-kernel GBLUP model for the two predcition scenarios: (1) from the Ames to 282 and (2) from the 282 to Ames. 
 
-
-
-
+#### 5.2-MultiKernel_Cv_trans
+This code applies the multi-kernel GBLUP model for the cross-validation within Ames or 282
 
 
 
