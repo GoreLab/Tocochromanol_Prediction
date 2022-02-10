@@ -14,4 +14,13 @@ The former code "1.4-MakeCvFold.R" creates a fold (i.e., randomly created K grou
 #### 1.5 MakeGenReMat.R
 This code calculates genomic relationship matrix for (1) all accessions either in the Ames or 282 panel, (2) accessions in the Ames panel, (3) accessions in the 282 panel, and (4) the 545 Ames accessions for the transcriptome-based predcition analysis. The genomic relationship matrix was calculated in VanRaden's method 1 (VanRaden, 2008).
 
+#### 2.1-GenPreFit_SinglePop_trans.R / 2.2-PredictionAccuracy_trans.R
+The former code "2.1-GenPreFit_SinglePop_trans.R fits the BayesB model on the training population (either Ames or 282 panel) and estimates the marker effects using BGLR package. The latter code "2.2-PredictionAccuracy_trans.R" uses the estimated marker effects (and grand mean) to calculate the predicted values in the test population, and apply the back-transformation (i.e., inverse Box-Cox transfomration) with the convinient lambda values of the training population for each tocochromanol phenotype. 
+Note that the name of the latter code is misleading, as it does not calculate the prediction accuracy. Originally, the code was implemented to calculate the predictive ability, but we decided to evaluate the predictive ability using the non-overlapping lines.
+
+#### 2.3-GenPreFit_SinglePop_trans_GBLUP.R
+This code uses GBLUP to predict (1) the 282 panel from the Ames panel and (2) the Ames panel from the 282 panel. The predicted genotypic values were back-transformed as done in "2.2-PredictionAccuracy_trans.R" for the result from BayesB.
+
+
+
 
