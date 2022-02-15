@@ -54,6 +54,17 @@ This code applies the multi-kernel GBLUP model for the cross-validation within A
 
 
 ## Codes for summarizing the result: calculate predictive ability, make figures and tables
-#### From 99.01-MakeSummaryFiles.R to 99.05-Panel_plot_Importance_ExprPred.R
-All these five codes uses prediction results to make summary table and figures.
+#### 99.01-MakeSummaryFiles.R
+This code makes files of the predicted tocohromanol phenotypes (i.e., back-transformed values), using the result files from the previous codes. 
 
+#### 99.02-MakeFigAndTables_UseNamQtl_NonOverlap.R
+This code makes figures and tables of the multi-kernel prediction analysis using NAM QTL.
+
+#### 99.03-MakeFigsAndTables_ExprPred.R
+This code makes figures and tables of the prediction analysis using transcripts
+
+#### 99.04-PCA_of_Importance_ExprPred.R
+This code performs PCA for the regression coefficients of the transcripts and visualize the result in the PCA bi-plot
+
+#### 99.05-Panel_plot_Importance_ExprPred.R
+This code visualizes the importance of NAM QTL with their PVE for each tocochromanol phenotype
