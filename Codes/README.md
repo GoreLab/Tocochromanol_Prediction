@@ -53,5 +53,7 @@ This code applies the multi-kernel GBLUP model for the two predcition scenarios:
 This code applies the multi-kernel GBLUP model for the cross-validation within Ames or 282
 
 
-
+## Codes for summarizing the result: calculate predictive ability, make figures and tables
+#### From 99.01-MakeSummaryFiles.R to 99.05-Panel_plot_Importance_ExprPred.R
+All these five codes uses prediction results to make summary table and figures.
 
