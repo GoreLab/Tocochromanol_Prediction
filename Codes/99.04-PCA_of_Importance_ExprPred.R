@@ -185,8 +185,12 @@ df.cand[df.cand$id %in% c("Zm00001d014734", "Zm00001d014737"), ]
 
 # list of the 13 genes
 df.gene.13 <- as.data.frame(read_xlsx("RAWDATA/CandidateGeneNames.xlsx"))
-df.gene.13$Gene[df.gene.13$`Gene ID` == "Zm00001d014737"] <- "arodeH2-b" # manually re-name
+df.gene.13$Gene <- paste0("italic(", df.gene.13$Gene, ")")
+df.gene.13$Gene[df.gene.13$`Gene ID` == "Zm00001d014734"] <- "italic(arodeH2)[Zm00001d014734]" # manually re-name
+df.gene.13$Gene[df.gene.13$`Gene ID` == "Zm00001d014737"] <- "italic(arodeH2)[Zm00001d014737]" # manually re-name
 
+# add sds2 (as this was in top10% for at least one trait in NAM)
+df.gene.13 <- rbind.data.frame(df.gene.13, c("Zm00001d027694", "italic(sds2)"))
 
 # ---------------------------------------------------------------------------- #
 # ----- PCA using regression coefficients
@@ -197,7 +201,7 @@ dir.create(dir.save.2)
 
 # setup
 trait.all <- c("a.T", "d.T", "g.T", "a.T3", "d.T3", "g.T3",
-							 "Total.Tocopherols", "Total.Tocotrienols", "Total.Tocochromanols")
+			   "Total.Tocopherols", "Total.Tocotrienols", "Total.Tocochromanols")
 TraitSets <- c("UseAll", "UseSix")
 Models <- c("TBLUP.AllGenes", "GTBLUP.AllGenes", "TBLUP.CandGenes", "GTBLUP.CandGenes")
 df.all.param <- expand.grid("TraitSet" = TraitSets, "Model" = Models, "Path"= NA, stringsAsFactors = F)
@@ -239,17 +243,66 @@ for ( k in 1:nrow(df.all.param) ) {
 	# PC1 and PC2 for the 13 genes
 	m <- match(df.gene.13$`Gene ID`, rownames(pr.res$x))
 	df.fig <- cbind(df.gene.13, 
-									"PC1" = scale(pr.res$x[, 1])[m], 
-									"PC2" = scale(pr.res$x[, 2])[m])
+					"PC1" = scale(pr.res$x[, 1])[m], 
+					"PC2" = scale(pr.res$x[, 2])[m])
 	p <- my.ggbiplot(pr.res)
 	p <- p + geom_text_repel(df.fig, 
-													 mapping = aes(x = PC1, y = PC2, label = Gene),
-													 family = "Times", fontface = "italic", color = "red")
+							 mapping = aes(x = PC1, y = PC2, label = Gene),
+							 family = "Times", fontface = "italic", color = "red", parse = TRUE, size = 3)
 	p <- p + geom_point(df.fig, 
-											mapping = aes(x = PC1, y = PC2), color = "red")
+						mapping = aes(x = PC1, y = PC2), color = "red")
 	p <- p + theme(legend.position = "none")
 	p <- p + theme(text = element_text(family = "Times"))
 	p$layers <- c(p$layers[[2]], p$layers[[1]], p$layers[[3]], p$layers[[4]], p$layers[[5]])
 	ggsave(filename = fig.out, p, width = 10, height = 6)
 }
+
+
+#
+model <- "GTBLUP.AllGenes"
+path <- "RESULT/4.2-GenExpFit_trans/Coef_GBLUP+ExpAll_"
+coef.mat <- NULL
+for ( i in 1:length(trait.all) ) {
+	trait <- trait.all[i]
+	file.in <- paste0(path, trait, ".csv")
+	df.coef <- read.csv(file.in)
+	coef.mat <- cbind(coef.mat, df.coef$coef)
+}
+colnames(coef.mat) <- trait.all
+rownames(coef.mat) <- df.coef$GeneID
+M <- coef.mat[, c("a.T", "d.T", "g.T", "a.T3", "d.T3", "g.T3")]
+M.rank <- apply(-abs(M), 2, rank)
+M.rank.for.13.genes <- M.rank[df.gene.13$`Gene ID`, ]
+M.ranking.for.13.genes <- round(100 * M.rank.for.13.genes / nrow(M.rank), 2)
+M.is.top10.for.13.genes <- M.rank.for.13.genes < (nrow(M) / 10)
+vec <- apply(M.is.top10.for.13.genes, 1, sum)
+names(vec) <- df.gene.13$Gene
+df.save <- data.frame("ID" = rownames(M.ranking.for.13.genes),
+					  "name" = df.gene.13$Gene,
+					  M.ranking.for.13.genes)
+write.csv(df.save, file = "TmpFile_ranking_of_13_genes.csv", row.names = F)
+
+
+
+
+# #
+# model <- "GTBLUP.CandGenes"
+# path <- "RESULT/4.2-GenExpFit_trans/Coef_GBLUP+ExpCand_"
+# coef.mat <- NULL
+# for ( i in 1:length(trait.all) ) {
+# 	trait <- trait.all[i]
+# 	file.in <- paste0(path, trait, ".csv")
+# 	df.coef <- read.csv(file.in)
+# 	coef.mat <- cbind(coef.mat, df.coef$coef)
+# }
+# colnames(coef.mat) <- trait.all
+# rownames(coef.mat) <- df.coef$GeneID
+# M <- coef.mat[, c("a.T", "d.T", "g.T", "a.T3", "d.T3", "g.T3")]
+# M.rank <- apply(-abs(M), 2, rank)
+# M.rank.for.13.genes <- M.rank[df.gene.13$`Gene ID`, ]
+# M.is.top10.for.13.genes <- M.rank.for.13.genes < (nrow(M) / 10)
+# vec <- apply(M.is.top10.for.13.genes, 1, sum)
+# names(vec) <- df.gene.13$Gene
+# vec
+
 

@@ -526,6 +526,7 @@ for ( i in 1:length(win.all) ) {
    set.seed(100)
    win <- win.all[i]
    df.fig.sub <- df.fig[df.fig$Window == win, ]
+   # df.fig.sub$dummy <- c("low", "high")[as.numeric(df.fig.sub$PVE >= 0.1)  + 1]
    p <- ggplot(df.fig.sub, aes(x = PVE, y = Partial.Cor, color = Trait, size = Size))
    p <- p + facet_wrap(~ Scenario)
    p <- p + geom_point()
@@ -536,6 +537,8 @@ for ( i in 1:length(win.all) ) {
                             parse = TRUE,
                             family = "Times")
    p <- p + theme_bw()
+   # p <- p + geom_smooth(aes(x = PVE, y = Partial.Cor, group = dummy),
+   #                      color = "black", method = "lm", se = TRUE, size = .1)
    p <- p + theme(text = element_text(family = "Times"))
    p <- p + scale_color_manual(values = cols.9)
    p <- p + xlab("PVE in NAM population")
@@ -544,6 +547,30 @@ for ( i in 1:length(win.all) ) {
    p <- p + guides(colour = guide_legend(override.aes = list(size = 2)))
    ggsave(filename = paste0(dir.save, "/Figure_PA_with_PVE_WindowSize_", win, ".png"), p, width = 9, height = 5)
 }
+
+# calculate correlation
+df.cor <- expand.grid("Window" = win.all, "Scenario" = levels(df.fig$Scenario))[, 2:1]
+df.cor$Cor.Pval.low.PVE <- df.cor$Cor.low.PVE <- NA
+df.cor$Cor.Pval.high.PVE <- df.cor$Cor.high.PVE <- NA
+for ( i in 1:nrow(df.cor) ) {
+   scenaro <- df.cor$Scenario[i]
+   win <- df.cor$Window[i]
+   df.fig.sub <- df.fig[df.fig$Window == win & df.fig$Scenario == scenaro, ]
+   df.fig.sub$dummy <- c("low", "high")[as.numeric(df.fig.sub$PVE >= 0.1)  + 1]
+   res.test.low <- cor.test(df.fig.sub$PVE[df.fig.sub$dummy == "low"],
+                            df.fig.sub$Partial.Cor[df.fig.sub$dummy == "low"])
+   df.cor$Cor.low.PVE[df.cor$Window == win & df.cor$Scenario == scenaro] <- round(res.test.low$estimate, 3)
+   df.cor$Cor.Pval.low.PVE[df.cor$Window == win & df.cor$Scenario == scenaro] <- res.test.low$p.value
+   
+   res.test.high <- cor.test(df.fig.sub$PVE[df.fig.sub$dummy == "high"],
+                            df.fig.sub$Partial.Cor[df.fig.sub$dummy == "high"])
+   df.cor$Cor.high.PVE[df.cor$Window == win & df.cor$Scenario == scenaro] <- round(res.test.high$estimate, 3)
+   df.cor$Cor.Pval.high.PVE[df.cor$Window == win & df.cor$Scenario == scenaro] <- res.test.high$p.value
+}
+write.csv(df.cor, file = paste0(dir.save, "/Correlation_between_PVE_and_Predictive_Ability.csv"), row.names = F)
+
+
+################################################################################
 # make figures (2)
 df.fig <- df.all[, c("Scenario", "Trait", "Window", "NAME", "Partial.Cor", "n.SNP", "PVE")]
 df.fig <- df.fig[df.fig$NAME != "NonQtl", ]
