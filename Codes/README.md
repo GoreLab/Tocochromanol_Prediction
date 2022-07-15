@@ -68,3 +68,6 @@ This code performs PCA for the regression coefficients of the transcripts and vi
 
 #### 99.05-Panel_plot_Importance_ExprPred.R
 This code visualizes the importance of NAM QTL with their PVE for each tocochromanol phenotype
+
+#### 999-MakeFigs.R
+This code generates updated figures for publication (e.g., chage colors, sizes, legends)
