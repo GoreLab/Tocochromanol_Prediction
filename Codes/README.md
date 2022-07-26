@@ -3,32 +3,32 @@ This folder has all R codes to perform the analysis in "paper_title". All data a
 
 ## Codes to create data files from raw data files for the downstream statistical analyses
 #### 0.1-MyFun_BoxcoxFunction.R
-This R code has a function for the Box-Cox transformation, including an optimization of the convinient lambda value. This function was used in Wu et al. (in prep) for the tocochromanol phenotypes in Ames panel, and we applied the same method to the phenotypes in the 282 panel.
+This R code has a function for the Box-Cox transformation, including an optimization of the convinient lambda value. This function was used in Wu et al. (in prep) for the tocochromanol phenotypes in Ames panel, and we applied the same method to the phenotypes in the Goodman panel.
 
 #### 0.3-Functions_for_MTM.R
 This R code has a function to run the multi-trait model, which is used in "4.4-Mtm_UseSomeGenes.R"
 
 #### 1.1-MakeAmesPhenoData.R / 1.2-MakeGbPhenoData.R
-These two R codes create files of tocochromanol phenotypes: transformed and untransformed BLUE (for Ames panel) or BLUP (for the 282 panel) values, convinient lambda values, and the sample ID correspondence between phenotype and genotype data.
+These two R codes create files of tocochromanol phenotypes: transformed and untransformed BLUE (for Ames panel) or BLUP (for the Goodman panel) values, convinient lambda values, and the sample ID correspondence between phenotype and genotype data.
 
 #### 1.3.1-CalcIbs.R / 1.3.2-Finalize_overlap.R
-The former R code "1.3.1-CalcIbs.R" calculates pairwise IBS (identity by state) based on the 341,189 SNPs used in the prediction study for all 1,704 lines. This code also do an initial identification of the overlapping accessions between the 282 and Ames panels. After the first code, manual re-identification of the overlapping and non-overlapping accessions was done using the genotype catalog in GRIN. The latter code "1.3.2-Finalize_overlap.R" uses that manually re-identification result and create the summary information file of the 1,704 acccessions.
+The former R code "1.3.1-CalcIbs.R" calculates pairwise IBS (identity by state) based on the 341,189 SNPs used in the prediction study for all 1,704 lines. This code also do an initial identification of the overlapping accessions between the Goodman and Ames panels. After the first code, manual re-identification of the overlapping and non-overlapping accessions was done using the genotype catalog in GRIN. The latter code "1.3.2-Finalize_overlap.R" uses that manually re-identification result and create the summary information file of the 1,704 acccessions.
 
 #### 1.4-MakeCvFold.R / 1.6-MakeCvFold_Exp.R
-The former code "1.4-MakeCvFold.R" creates a fold (i.e., randomly created K groups, where K = 5 in this study) for the cross-validation with X replications (X = 10 in this study) for the Ames and the 282 panels. Similarly, "1.6-MakeCvFold_Exp.R" creates the cross-validation fold for the 545 accessions for the transcriptome-based prediction analysis.
+The former code "1.4-MakeCvFold.R" creates a fold (i.e., randomly created K groups, where K = 5 in this study) for the cross-validation with X replications (X = 10 in this study) for the Ames and the Goodman panels. Similarly, "1.6-MakeCvFold_Exp.R" creates the cross-validation fold for the 545 accessions for the transcriptome-based prediction analysis.
 
 #### 1.5-MakeGenReMat.R
-This code calculates genomic relationship matrix for (1) all accessions either in the Ames or 282 panel, (2) accessions in the Ames panel, (3) accessions in the 282 panel, and (4) the 545 Ames accessions for the transcriptome-based predcition analysis. The genomic relationship matrix was calculated in VanRaden's method 1 (VanRaden, 2008).
+This code calculates genomic relationship matrix for (1) all accessions either in the Ames or Goodman panel, (2) accessions in the Ames panel, (3) accessions in the Goodman panel, and (4) the 545 Ames accessions for the transcriptome-based predcition analysis. The genomic relationship matrix was calculated in VanRaden's method 1 (VanRaden, 2008).
 
 
 ## Codes for the two whole-genome prediction models (GBLUP and BayesB)
 #### 2.1-GenPreFit_SinglePop_trans.R / 2.2-PredictionAccuracy_trans.R
-The former code "2.1-GenPreFit_SinglePop_trans.R fits the BayesB model on the training population (either Ames or 282 panel) and estimates the marker effects using BGLR package. The latter code "2.2-PredictionAccuracy_trans.R" uses the estimated marker effects (and grand mean) to calculate the predicted values in the test population, and apply the back-transformation (i.e., inverse Box-Cox transfomration) with the convinient lambda values of the training population for each tocochromanol phenotype.
+The former code "2.1-GenPreFit_SinglePop_trans.R fits the BayesB model on the training population (either Ames or Goodman panel) and estimates the marker effects using BGLR package. The latter code "2.2-PredictionAccuracy_trans.R" uses the estimated marker effects (and grand mean) to calculate the predicted values in the test population, and apply the back-transformation (i.e., inverse Box-Cox transfomration) with the convinient lambda values of the training population for each tocochromanol phenotype.
 
 Note that the name of the latter code is misleading, as it does not calculate the prediction accuracy. Originally, the code was implemented to calculate the predictive ability, but we decided to evaluate the predictive ability using the non-overlapping lines.
 
 #### 2.3-GenPreFit_SinglePop_trans_GBLUP.R
-This code uses GBLUP to predict (1) the 282 panel from the Ames panel and (2) the Ames panel from the 282 panel. The predicted genotypic values were back-transformed as done in "2.2-PredictionAccuracy_trans.R" for the result from BayesB.
+This code uses GBLUP to predict (1) the Goodman panel from the Ames panel and (2) the Ames panel from the Goodman panel. The predicted genotypic values were back-transformed as done in "2.2-PredictionAccuracy_trans.R" for the result from BayesB.
 
 #### 3.1-GenPreCv_SinglePop_trans.R / 3.2-GenPreCv_SinglePop_trans_GBLUP.R
 These codes perform the cross-validation: the former code "3.1-GenPreCv_SinglePop_trans.R" uses the BayesB model, while the latter uses the GBLUP model.
@@ -47,10 +47,10 @@ These two codes applies the multi-trait model as one of our transcriptome-based 
 
 ## Codes for the multi-kernel GBLUP based on the NAM JL-QTL
 #### 5.1-MultiKernel_Across_trans.R
-This code applies the multi-kernel GBLUP model for the two predcition scenarios: (1) from the Ames to 282 and (2) from the 282 to Ames. 
+This code applies the multi-kernel GBLUP model for the two predcition scenarios: (1) from the Ames to Goodman and (2) from the Goodman to Ames. 
 
 #### 5.2-MultiKernel_Cv_trans
-This code applies the multi-kernel GBLUP model for the cross-validation within Ames or 282
+This code applies the multi-kernel GBLUP model for the cross-validation within Ames or Goodman
 
 
 ## Codes for summarizing the result: calculate predictive ability, make figures and tables
@@ -74,12 +74,5 @@ This code generates updated figures for publication (e.g., chage colors, sizes, 
 
 ## Codes for genotype processing
 #### Ames_282_GP_imputation_filtering_pruning.sh
-This code uses in the genotypes of both Ames and 282 panel genotyped with GBS, and imputed onto Hapmap v3.2.1 independently for two panels. Afterwards, the two genotypes are merged and filtered based on imputation quality and MAF, and pruned based on LD of sliding windows.
-
-
-
-
-
-
-
+This code uses in the genotypes of both Ames and Goodman panel genotyped with GBS, and imputed onto Hapmap v3.2.1 independently for two panels. Afterwards, the two genotypes are merged and filtered based on imputation quality and MAF, and pruned based on LD of sliding windows.
 
