@@ -71,3 +71,15 @@ This code visualizes the importance of NAM QTL with their PVE for each tocochrom
 
 #### 999-MakeFigs.R
 This code generates updated figures for publication (e.g., chage colors, sizes, legends)
+
+## Codes for genotype processing
+#### Ames_282_GP_imputation_filtering_pruning.sh
+This code uses in the genotypes of both Ames and 282 panel genotyped with GBS, and imputed onto Hapmap v3.2.1 independently for two panels. Afterwards, the two genotypes are merged and filtered based on imputation quality and MAF, and pruned based on LD of sliding windows.
+
+
+
+
+
+
+
+
