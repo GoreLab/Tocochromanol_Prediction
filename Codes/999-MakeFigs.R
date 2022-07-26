@@ -10,6 +10,7 @@ library(ggrepel)
 library(scales)
 library(ggpubr)
 library(RColorBrewer)
+library(ggtext)
 
 # function to be used
 see <- function(x){x[1:5, 1:5]}
@@ -136,13 +137,13 @@ myFun.ChangeTraitNames <- function(x) {
    return(x)
 }
 myFun.ChangeModeltNames.NamQtl <- function(x) {
-   x[x == "250K"] <- "MK-GBLUP\n(250 kb)"
-   x[x == "1M"] <- "MK-GBLUP\n(1 Mb)"
+   x[x == "250K"] <- "MK-GBLUP\n(± 250 kb)"
+   x[x == "1M"] <- "MK-GBLUP\n(± 1 Mb)"
    x[x == "SI"] <- "MK-GBLUP\n(SI)"
    x <- factor(x, levels = c("GBLUP", 
                              "BayesB", 
-                             "MK-GBLUP\n(250 kb)", 
-                             "MK-GBLUP\n(1 Mb)", 
+                             "MK-GBLUP\n(± 250 kb)", 
+                             "MK-GBLUP\n(± 1 Mb)", 
                              "MK-GBLUP\n(SI)"))
    return(x)
 }
@@ -193,10 +194,10 @@ myFun.ChangeModeltNames.Expr <- function(x) {
    x[x == "TBLUP_sub"] <- "TRM.cand"
    x[x == "GBLUP+TBLUP"] <- "GRM+TRM.all"
    x[x == "GBLUP+TBLUP_sub"] <- "GRM+TRM.cand"
-   x[x == "MultiNamLargeGenes"] <- "Multi-trait model"
+   x[x == "MultiNamLargeGenes"] <- "Multi-trait GBLUP"
    x <- factor(x, levels = c("GBLUP\n(Baseline)", "TRM.all", 
                              "TRM.cand", "GRM+TRM.all",
-                             "GRM+TRM.cand", "Multi-trait model"))
+                             "GRM+TRM.cand", "Multi-trait GBLUP"))
    return(x)
 }
 
@@ -251,30 +252,37 @@ list.all <- list(
                               df.obs = GbPheno, pred.id.all = GbPheno$ID)
 )
 list.all.SD <- lapply(list.all, myFun.Calc.SD)
+
 df.fig <- ldply(list.all.SD, data.frame)
 df.fig$Model <- myFun.ChangeModeltNames.NamQtl(df.fig$Model)
 df.fig$Trait <- myFun.ChangeTraitNames(df.fig$Trait)
+df.fig$Scenario[df.fig$Scenario == "Within Ames"] <- "'Within Ames ('*italic('n')*' = 1,462)'"
+df.fig$Scenario[df.fig$Scenario == "From Ames to 282"] <- "'From Ames ('*italic('n')*' = 1,462) to Goodman ('*italic('n')*' = 76)'"
+df.fig$Scenario[df.fig$Scenario == "From 282 to Ames"] <- "'From Goodman ('*italic('n')*' = 242) to Ames ('*italic('n')*' = 1,296)'"
+df.fig$Scenario[df.fig$Scenario == "Within 282"] <- "'Within Goodman ('*italic('n')*' = 242)'"
 df.fig$Scenario <- factor(df.fig$Scenario, 
-                          levels = c("Within Ames", "From Ames to 282", 
-                                     "From 282 to Ames", "Within 282"))
+                          levels = c("'Within Ames ('*italic('n')*' = 1,462)'", 
+                                     "'From Ames ('*italic('n')*' = 1,462) to Goodman ('*italic('n')*' = 76)'", 
+                                     "'From Goodman ('*italic('n')*' = 242) to Ames ('*italic('n')*' = 1,296)'", 
+                                     "'Within Goodman ('*italic('n')*' = 242)'"))
 df.fig <- myFun.Attach.SD.bar(df.fig)
 p <- ggplot(df.fig, aes(x = Trait, y = PA, fill = Model))
-p <- p + facet_wrap(~ Scenario)
+p <- p + facet_wrap(~ Scenario, labeller = label_parsed)
+p <- p + geom_bar(stat = "identity", position = position_dodge(), color = "black")
 p <- p + geom_errorbar(aes(ymin = SD.bar.min, 
                            ymax = SD.bar.max), 
                        position = position_dodge(.9), width=.5)
-p <- p + geom_bar(stat = "identity", position = position_dodge(), color = "black")
 p <- p + theme_bw()
 p <- p + theme(text = element_text(family = "Times"))
 p <- p + xlab("Phenotype")
 p <- p + ylab("Predictive ability")
 p <- p + scale_fill_manual(values = cols.QTL)
 p <- p + theme(legend.key.height= unit(1, 'cm'))
-ggplot2::ggsave(filename = paste0(dir.save, "/Fig1a_small.eps"), 
+ggplot2::ggsave(filename = paste0(dir.save, "/Fig1a_small_TwoSideBar.eps"), 
                 plot = p, 
                 device = cairo_ps, 
                 dpi = 300, 
-                width = 12 * 0.6,
+                width = 12 * 0.7,
                 height = 6 * 0.6)
 
 # ---------------------------------------------------------------------------- #
@@ -304,27 +312,33 @@ df.fig <- myFun.Calc.SD(df.fig)
 df.fig <- df.fig[df.fig$Model != "GBLUP", ]
 df.fig$Model <- myFun.ChangeModeltNames.NamQtl(df.fig$Model)
 df.fig$Trait <- myFun.ChangeTraitNames(df.fig$Trait)
+df.fig$Scenario[df.fig$Scenario == "Within Ames"] <- "'Within Ames ('*italic('n')*' = 1,462)'"
+df.fig$Scenario[df.fig$Scenario == "From Ames to 282"] <- "'From Ames ('*italic('n')*' = 1,462) to Goodman ('*italic('n')*' = 76)'"
+df.fig$Scenario[df.fig$Scenario == "From 282 to Ames"] <- "'From Goodman ('*italic('n')*' = 242) to Ames ('*italic('n')*' = 1,296)'"
+df.fig$Scenario[df.fig$Scenario == "Within 282"] <- "'Within Goodman ('*italic('n')*' = 242)'"
 df.fig$Scenario <- factor(df.fig$Scenario, 
-                          levels = c("Within Ames", "From Ames to 282", 
-                                     "From 282 to Ames", "Within 282"))
+                          levels = c("'Within Ames ('*italic('n')*' = 1,462)'", 
+                                     "'From Ames ('*italic('n')*' = 1,462) to Goodman ('*italic('n')*' = 76)'", 
+                                     "'From Goodman ('*italic('n')*' = 242) to Ames ('*italic('n')*' = 1,296)'", 
+                                     "'Within Goodman ('*italic('n')*' = 242)'"))
 df.fig <- myFun.Attach.SD.bar(df.fig)
 p <- ggplot(df.fig, aes(x = Trait, y = PA, fill = Model))
-p <- p + facet_wrap(~ Scenario)
+p <- p + facet_wrap(~ Scenario, labeller = label_parsed)
+p <- p + geom_bar(stat = "identity", position = position_dodge(), color = "black")
 p <- p + geom_errorbar(aes(ymin = SD.bar.min, 
                            ymax = SD.bar.max), 
                        position = position_dodge(.9), width=.5)
-p <- p + geom_bar(stat = "identity", position = position_dodge(), color = "black")
 p <- p + theme_bw()
 p <- p + theme(text = element_text(family = "Times"))
 p <- p + xlab("Phenotype")
 p <- p + ylab("Improvement rate (%) relative to GBLUP")
 p <- p + scale_fill_manual(values = cols.QTL[-1])
 p <- p + theme(legend.key.height= unit(1, 'cm'))
-ggplot2::ggsave(filename = paste0(dir.save, "/Fig1b_small.eps"), 
+ggplot2::ggsave(filename = paste0(dir.save, "/Fig1b_small_TwoSideBar.eps"), 
                 plot = p, 
                 device = cairo_ps, 
                 dpi = 300, 
-                width = 12 * 0.6,
+                width = 12 * 0.7,
                 height = 6 * 0.6)
 
 # ---------------------------------------------------------------------------- #
@@ -351,17 +365,17 @@ df.fig <- df.fig[df.fig$Model != "GBLUP with covariates\n(Large-eff. genes)", ]
 #
 cols <- c("gray", brewer.pal(n = 5, name = "YlOrRd"))
 p <- ggplot(df.fig, aes(x = Trait, y = PA, fill = Model))
+p <- p + geom_bar(stat = "identity", position = position_dodge(), color = "black")
 p <- p + geom_errorbar(aes(ymin = SD.bar.min, 
                            ymax = SD.bar.max), 
                        position = position_dodge(.9), width=.5)
-p <- p + geom_bar(stat = "identity", position = position_dodge(), color = "black")
 p <- p + theme_bw()
 p <- p + theme(text = element_text(family = "Times"))
 p <- p + xlab("Phenotype")
 p <- p + ylab("Predictive ability")
 p <- p + theme(legend.key.height= unit(1, 'cm'))
 p <- p + scale_fill_manual(values = cols)
-ggplot2::ggsave(filename = paste0(dir.save, "/Fig2a_small.eps"), 
+ggplot2::ggsave(filename = paste0(dir.save, "/Fig2a_small_TwoSideBar.eps"), 
                 plot = p, 
                 device = cairo_ps, 
                 dpi = 300, 
@@ -401,10 +415,10 @@ df.fig$Model <- myFun.ChangeModeltNames.Expr(df.fig$Model)
 df.fig <- df.fig[df.fig$Model != "GBLUP\n(Baseline)", ]
 cols <- brewer.pal(n = 5, name = "YlOrRd")
 p <- ggplot(df.fig, aes(x = Trait, y = PA, fill = Model))
+p <- p + geom_bar(stat = "identity", position = position_dodge(), color = "black")
 p <- p + geom_errorbar(aes(ymin = SD.bar.min, 
                            ymax = SD.bar.max), 
                        position = position_dodge(.9), width=.5)
-p <- p + geom_bar(stat = "identity", position = position_dodge(), color = "black")
 p <- p + theme_bw()
 p <- p + theme(text = element_text(family = "Times"))
 p <- p + xlab("Phenotype")
