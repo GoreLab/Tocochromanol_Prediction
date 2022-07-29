@@ -1,2 +1,2 @@
 # README
-This is a repository for my on-going manuscript of tocochromanol prediction in maize Ames and Goodman panels.
+This is a repository for "Leveraging prior biological knowledge improves prediction of tocochromanols in maize grain" under review
