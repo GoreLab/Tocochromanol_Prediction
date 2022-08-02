@@ -11,8 +11,11 @@ This R code has a function to run the multi-trait model, which is used in "4.4-M
 #### 1.1-MakeAmesPhenoData.R / 1.2-MakeGbPhenoData.R
 These two R codes create files of tocochromanol phenotypes: transformed and untransformed BLUE (for Ames panel) or BLUP (for the Goodman panel) values, convinient lambda values, and the sample ID correspondence between phenotype and genotype data.
 
-#### 1.3.1-CalcIbs.R / 1.3.2-Finalize_overlap.R
+#### 1.3.1-CalcIbs.R / 1.3.2-Finalize_overlap.R / 1.3.3-CalcIbs_UseLineNames.R
 The former R code "1.3.1-CalcIbs.R" calculates pairwise IBS (identity by state) based on the 341,189 SNPs used in the prediction study for all 1,704 lines. This code also do an initial identification of the overlapping accessions between the Goodman and Ames panels. After the first code, manual re-identification of the overlapping and non-overlapping accessions was done using the genotype catalog in GRIN. The latter code "1.3.2-Finalize_overlap.R" uses that manually re-identification result and create the summary information file of the 1,704 acccessions.
+
+While the two codes had been initially made for the identification of 1,704 acccessions, we finally decided to use accession names to identify duplications between the two panels. In the third code "1.3.3-CalcIbs_UseLineNames.R", we confirmed that we can identify four pairs of lines (i.e., lines having same name between Ames and Goodman panels) that have low pairwise IBS (IBS < 0.80).
+
 
 #### 1.4-MakeCvFold.R / 1.6-MakeCvFold_Exp.R
 The former code "1.4-MakeCvFold.R" creates a fold (i.e., randomly created K groups, where K = 5 in this study) for the cross-validation with X replications (X = 10 in this study) for the Ames and the Goodman panels. Similarly, "1.6-MakeCvFold_Exp.R" creates the cross-validation fold for the 545 accessions for the transcriptome-based prediction analysis.
