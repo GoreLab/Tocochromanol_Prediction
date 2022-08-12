@@ -5,6 +5,9 @@ This folder has all R codes to perform the analysis in "paper_title". All data a
 #### 0.1-MyFun_BoxcoxFunction.R
 This R code has a function for the Box-Cox transformation, including an optimization of the convinient lambda value. This function was used in Wu et al. (in prep) for the tocochromanol phenotypes in Ames panel, and we applied the same method to the phenotypes in the Goodman panel.
 
+#### 0.2-MultiKernel_MyFunToSelectSnps.R
+This R code has a function to run the multi-kernel GBLUP model with different window sizes
+
 #### 0.3-Functions_for_MTM.R
 This R code has a function to run the multi-trait model, which is used in "4.4-Mtm_UseSomeGenes.R"
 
