@@ -169,35 +169,3 @@ df.1704 <- data.frame("Panel" = rep(c("Ames", "Goodman"), times = c(nrow(df.Ames
                       "Pairwise.IBS" = c(df.Ames$Pairwise.IBS, df.Good$Pairwise.IBS),
                       "Overlap" = c(df.Ames$Overlap, df.Good$Overlap))
 write.csv(df.1704, "OverlapResult/OverlapResult_all.csv", row.names = F)
-
-# ################################################################################
-# # load the updated table S1
-# df.match.with.Mike <- read.xlsx("Table S1.xlsx", startRow = 2)
-# 
-# # ---------------------- #
-# # (1) on the Ames panel  
-# # ---------------------- #
-# df.match.with.Mike.Ames <- df.match.with.Mike[df.match.with.Mike$Panel == "Ames", ]
-# df.match.by.Ryokei.Ames <- df.1704[df.1704$Panel == "Ames", ]
-# 
-# # check the order of lines  -- ok
-# df.match.with.Mike.Ames[df.match.with.Mike.Ames$Inbred.line.name != df.match.by.Ryokei.Ames$Inbred.Line.Name, ]
-# df.match.by.Ryokei.Ames[df.match.with.Mike.Ames$Inbred.line.name != df.match.by.Ryokei.Ames$Inbred.Line.Name, ]
-# 
-# # compare -- I have two newly defined overlapping lines
-# table("Overlap.with.Mike" = df.match.with.Mike.Ames$Overlap.a, "Overlap.new.Ryokei" = df.match.by.Ryokei.Ames$Overlap)
-# 
-# # show the one case -- W22R
-# df.match.by.Ryokei.Ames[(df.match.with.Mike.Ames$Overlap.a == "No") & (df.match.by.Ryokei.Ames$Overlap == "Yes"), ]
-# 
-# 
-# # ---------------------- #
-# # (2) on the Goodman panel  
-# # ---------------------- #
-# df.match.with.Mike.Good <- df.match.with.Mike[df.match.with.Mike$Panel == "Goodman", ]
-# df.match.by.Ryokei.Good <- df.1704[df.1704$Panel == "Goodman", ]
-# 
-# # compare -- I have two newly defined overlapping lines
-# table("Overlap.with.Mike" = df.match.with.Mike.Good$Overlap.a, "Overlap.new.Ryokei" = df.match.by.Ryokei.Good$Overlap)
-# df.match.by.Ryokei.Good[df.match.with.Mike.Good$Overlap.a != df.match.by.Ryokei.Good$Overlap, ]
-# 
