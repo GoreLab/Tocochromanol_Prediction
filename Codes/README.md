@@ -70,7 +70,8 @@ This code makes figures and tables of the prediction analysis using transcripts 
 This code performs PCA for the regression coefficients of the transcripts and visualize the result in the PCA bi-plot [OLD CODE AND NOT USED FOR THE FINAL FIGURES]
 
 #### 99.05-Panel_plot_Importance_ExprPred.R
-This code visualizes the importance of NAM QTL with their PVE for each tocochromanol phenotype [This makes a prototype of a figure]
+This code visualizes the importance of NAM QTL with their PVE for each tocochromanol phenotype [OLD CODE AND NOT USED FOR THE FINAL FIGURES]
+
 
 #### 999-MakeFigs.R
 This code generates figures for publication
